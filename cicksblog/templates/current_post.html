@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<article class="media content-section">
+    {% if post.author.id == current_user.id %}
+    <a href="{{ url_for('users.account') }}" title="click to see your profile">
+        <img class="rounded-circle article-img" src="{{url_for('static', filename='img/' + post.author.user_pict)}}">
+    </a>
+    {% else %}
+    <a href="{{ url_for('users.account_info', username=post.author.username) }}" title="click to see this profile">
+        <img class="rounded-circle article-img" src="{{url_for('static', filename='img/' + post.author.user_pict)}}">
+    </a>
+    {% endif %}
+    <div class="media-body">
+        <div class="article-metadata mb-2">
+            <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">
+                {{ post.author.username }}
+            </a>
+            <small class="text-muted">{{ post.date_posted.strftime('%A, %d %b %Y.') }}</small>
+            {% if post.author.id == current_user.id %}
+            <div class="action my-2">
+                <a role="button" id="btn-edit" class="btn btn-primary btn-sm mr-2"
+                    href="{{url_for('posts.edit_post', post_id=post.id)}}">
+                    Edit Post
+                </a>
+                <a role="button" id="btn-delete" class="btn btn-danger btn-sm mr-2"
+                    href="{{url_for('posts.delete_post', post_id=post.id)}}">
+                    Delete Post
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        <h3 class="article-title">{{ post.title }}</h3>
+        <p class="article-content">{{ post.content }}</p>
+    </div>
+</article>
+
+{% endblock content %}
